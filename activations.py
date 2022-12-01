@@ -5,12 +5,13 @@ from loss import Loss_CategoricalCrossEntropy
 class Activation_ReLU:
 
     def forward(self, inputs):
+        # save inputs for backprop
         self.inputs = inputs
         self.output = np.maximum(0, inputs)
 
     def backward(self, dvalues):
         self.dinputs = dvalues.copy()
-        self.dinputs[self.inputs <= 0] = 0
+        self.dinputs[self.inputs <= 0] = 0 # apply dReLU * dvalues
 
 class Activation_Softmax:
 
@@ -30,7 +31,7 @@ class Activation_Softmax:
             jacobian_matrix = np.diagflat(single_output) - np.dot(single_output, single_output.T)
             self.dinputs[index] = np.dot(jacobian_matrix, single_dvalues)
 
-class Activation_Softmax_Loss_CategoricalCrossentropy():
+class Activation_Softmax_Loss_CategoricalCrossentropy:
 
     def __init__(self):
         self.activation = Activation_Softmax()

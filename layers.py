@@ -11,19 +11,12 @@ class Layer_Dense:
     def forward(self, inputs):
         # Calculate output values from inputs, weigths, and biases
         self.output = np.dot(inputs, self.weights) + self.biases
+        # save inputs for backprop
         self.inputs = inputs
 
     def backward(self, dvalues):
         # Gradients on parameters
-        self.dweights = np.dot(self.inputs.T, dvalues)
-        self.dbiases = np.sum(dvalues, axis=0,keepdims=True)
+        self.dweights = np.dot(self.inputs.T, dvalues) # dvalues is output gradient
+        self.dbiases = np.sum(dvalues, axis=0,keepdims=True) 
+        # gradient on input values
         self.dinputs = np.dot(dvalues, self.weights.T)
-
-
-# Questions:
-
-# Q: What os the 0.01 magic number called?
-# A: 
-
-# Q: why n_inputs, n_neurons?
-# A: Remember how we were transposing before?

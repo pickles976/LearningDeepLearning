@@ -13,17 +13,18 @@ nnfs.init()
 
 X, y = spiral_data(samples=100, classes=3)
 
-# 3 neurons per input, 2 inputs per 'shot'
-dense1 = Layer_Dense(2,3)
+# 2 input features, 64 output values
+dense1 = Layer_Dense(2, 64)
 
 # Create ReLU activation (to be used with dense layer)
 activation1 = Activation_ReLU()
 
-dense2 = Layer_Dense(3, 3)
+# 64 inputs, 3 outputs
+dense2 = Layer_Dense(64, 3)
 
 loss_activation = Activation_Softmax_Loss_CategoricalCrossentropy()
 
-optimizer = Optimizer_SGD(learning_rate=0.85)
+optimizer = Optimizer_SGD()
 
 for epoch in range(10001):
 

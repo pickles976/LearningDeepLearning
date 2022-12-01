@@ -36,16 +36,16 @@ class Loss_CategoricalCrossEntropy(Loss):
         regative_log_likelihoods = -np.log(correct_confidences)
         return regative_log_likelihoods
 
+    # backward pass
     def backward(self, dvalues, y_true):
-
         samples = len(dvalues)
-
         labels = len(dvalues[0])
 
         if len(y_true.shape) == 1:
             y_true = np.eye(labels)[y_true]
 
         self.dinputs = -y_true / dvalues
+        # normalize gradient sum to batch size
         self.dinputs = self.dinputs / samples
 
 # TODO: I dont really understand the shape ==2 thing?
