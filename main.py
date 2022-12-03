@@ -5,6 +5,7 @@ import nnfs
 
 from activations import Activation_ReLU, Activation_Softmax_Loss_CategoricalCrossentropy
 from layers import Layer_Dense
+from loss import regularization_loss
 from optimizer import Optimizer_SGD, Optimizer_Adam
 
 nnfs.init()
@@ -32,7 +33,10 @@ for epoch in range(10001):
     dense1.forward(X)
     activation1.forward(dense1.output)
     dense2.forward(activation1.output)
-    loss = loss_activation.forward(dense2.output, y)
+
+    data_loss = loss_activation.forward(dense2.output, y)
+    regularization_loss = regularization_loss(dense1) + regularization_loss(dense2)
+    loss = data_loss + regularization_loss
 
     # Calculate accuracy
     predictions = np.argmax(loss_activation.output, axis=1)
@@ -54,3 +58,23 @@ for epoch in range(10001):
     # Update weights and biases
     optimizer.update_params(dense1)
     optimizer.update_params(dense2)
+
+# Validate model
+
+# create test dataset
+X_test, y_test = spiral_data(samples=100, classes=3)
+
+dense1.forward(X_test)
+
+activation1.forward(dense1.output)
+
+dense2.forward(activation1.output)
+
+loss = loss_activation.forward(dense2.output, y_test)
+
+predictions = np.argmax(loss_activation.output, axis=1)
+if len(y_test.shape) == 2:
+    y_test = np.argmax(y_test, axis=1)
+accuracy = np.mean(predictions==y_test)
+
+print(f'Validation, acc: {accuracy:.3f}, loss: {loss:.3f}')

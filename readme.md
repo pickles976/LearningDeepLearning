@@ -86,3 +86,37 @@ Root Mean Square Propagation also calculates an adaptive learning rate per param
 
 **Ada**ptive **M**omentum uses momentum, but with a per-weight adaptive learning rate.
 
+## Data Practices
+
+### K-Fold Cross-Validation
+
+Assume we have limited data. Let's split it into ABCDE
+
+For one epoch we'll train on ABCD and validate on E
+The next epoch we'll train on ABDE and validate on E
+so on and so forth
+
+### Pre-processing
+
+Neural nets work best on data valued from -1 to +1
+Normalizing data to this range can be a pre-processing step.
+
+### L1 and L2 regularization
+
+L1 and L2 regularization are used to calculate a penalty added to the loss value to penalize for having large weights and biases.
+
+#### Forward Pass:
+
+L1's regularization penalty is the sum of all the absolute values for the weights and biases.
+
+L1w = λsum(abs(w)) where w is the array of weights
+
+L2's regularization penalty is the sum of all the squares of the weights and biases. This non-linearity penalizes larger values more heavily.
+
+L2w = λsum(w ** 2) where w is the array of weights
+
+Overall loss:
+Loss = DataLoss + L1w + L1b + L2w + L2b
+
+#### Backward Pass:
+
