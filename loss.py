@@ -9,6 +9,30 @@ class Loss:
 
         return data_loss
 
+    # regularization loss calculation
+    def regularization_loss(self, layer):
+
+        # zero default
+        regularization_loss = 0
+
+        # L1 regularization weights
+        if layer.weight_regularizer_L1 > 0:
+            regularization_loss += layer.weight_regularizer_L1 * np.sum(np.abs(layer.weights))
+
+        # L1 regularization bias
+        if layer.bias_regularizer_L1 > 0:
+            regularization_loss += layer.bias_regularizer_L1 * np.sum(np.abs(layer.biases))
+
+        # L2 regularization weights
+        if layer.weight_regularizer_L2 > 0:
+            regularization_loss += layer.weight_regularizer_L2 * np.sum(layer.weights * layer.weights)
+
+        # L2 regularization bias
+        if layer.bias_regularizer_L2 > 0:
+            regularization_loss += layer.bias_regularizer_L2 * np.sum(layer.bias * layer.bias)
+
+        return regularization_loss
+
 class Loss_CategoricalCrossEntropy(Loss):
     
     # forward pass
@@ -49,27 +73,3 @@ class Loss_CategoricalCrossEntropy(Loss):
         self.dinputs = self.dinputs / samples
 
 # TODO: I dont really understand the shape ==2 thing?
-
-# regularization loss calculation
-def regularization_loss(self, layer):
-
-    # zero default
-    regularization_loss = 0
-
-    # L1 regularization weights
-    if layer.weight_regularizer_L1 > 0:
-        regularization_loss += layer.weight_regularizer_L1 * np.sum(np.abs(layer.weights))
-
-    # L1 regularization bias
-    if layer.bias_regularizer_L1 > 0:
-        regularization_loss += layer.bias_regularizer_L1 * np.sum(np.abs(layer.biases))
-
-    # L2 regularization weights
-    if layer.weight_regularizer_L2 > 0:
-        regularization_loss += layer.weight_regularizer_L2 * np.sum(layer.weights * layer.weights)
-
-    # L2 regularization bias
-    if layer.bias_regularizer_L2 > 0:
-        regularization_loss += layer.bias_regularizer_L2 * np.sum(layer.bias * layer.bias)
-
-    return regularization_loss

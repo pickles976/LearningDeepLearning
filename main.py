@@ -5,7 +5,6 @@ import nnfs
 
 from activations import Activation_ReLU, Activation_Softmax_Loss_CategoricalCrossentropy
 from layers import Layer_Dense
-from loss import regularization_loss
 from optimizer import Optimizer_SGD, Optimizer_Adam
 
 nnfs.init()
@@ -35,7 +34,7 @@ for epoch in range(10001):
     dense2.forward(activation1.output)
 
     data_loss = loss_activation.forward(dense2.output, y)
-    regularization_loss = regularization_loss(dense1) + regularization_loss(dense2)
+    regularization_loss = loss_activation.loss.regularization_loss(dense1) + loss_activation.loss.regularization_loss(dense2)
     loss = data_loss + regularization_loss
 
     # Calculate accuracy

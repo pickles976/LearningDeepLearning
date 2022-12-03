@@ -120,3 +120,7 @@ Loss = DataLoss + L1w + L1b + L2w + L2b
 
 #### Backward Pass:
 
+dL2w = 2λw
+
+dL1w = λ (1 if w > 0 : -1 if w < 0)
+
