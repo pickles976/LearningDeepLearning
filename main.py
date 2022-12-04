@@ -4,7 +4,7 @@ import numpy as np
 import nnfs
 
 from activations import Activation_ReLU, Activation_Softmax_Loss_CategoricalCrossentropy
-from layers import Layer_Dense
+from layers import Layer_Dense, Layer_Dropout
 from optimizer import Optimizer_SGD, Optimizer_Adam
 
 nnfs.init()
@@ -14,24 +14,27 @@ nnfs.init()
 X, y = spiral_data(samples=100, classes=3)
 
 # 2 input features, 64 output values
-dense1 = Layer_Dense(2, 64)
+dense1 = Layer_Dense(2, 512, weight_regularizer_L2=5e-4, bias_regularizer_L2=5e-4)
 
 # Create ReLU activation (to be used with dense layer)
 activation1 = Activation_ReLU()
 
+dropout1 = Layer_Dropout(0.1)
+
 # 64 inputs, 3 outputs
-dense2 = Layer_Dense(64, 3)
+dense2 = Layer_Dense(512, 3)
 
 loss_activation = Activation_Softmax_Loss_CategoricalCrossentropy()
 
-optimizer = Optimizer_Adam(learning_rate=0.05, decay=1e-7)
+optimizer = Optimizer_Adam(learning_rate=0.05, decay=5e-5)
 
 for epoch in range(10001):
 
     # Forward pass to calculate loss function
     dense1.forward(X)
     activation1.forward(dense1.output)
-    dense2.forward(activation1.output)
+    dropout1.forward(activation1.output)
+    dense2.forward(dropout1.output)
 
     data_loss = loss_activation.forward(dense2.output, y)
     regularization_loss = loss_activation.loss.regularization_loss(dense1) + loss_activation.loss.regularization_loss(dense2)
@@ -51,7 +54,8 @@ for epoch in range(10001):
     # Backward pass
     loss_activation.backward(loss_activation.output, y)
     dense2.backward(loss_activation.dinputs)
-    activation1.backward(dense2.dinputs)
+    dropout1.backward(dense2.dinputs)
+    activation1.backward(dropout1.dinputs)
     dense1.backward(activation1.dinputs)
 
     # Update weights and biases

@@ -124,3 +124,19 @@ dL2w = 2λw
 
 dL1w = λ (1 if w > 0 : -1 if w < 0)
 
+### Dropout
+
+Dropout works by randomly disbaling neurons at a given rate during every forward pass, forcing the network to learn how to make accurate predictions with only a random part of neurons remaining.
+
+Because the output will be smaller due to fewer weights, we multiply the output by the dropout rate. So if 30% of neurons are inactive, we multiply the output by 30% to make up for the discrepancy.
+
+This makes the backward pass value for the dropout function equal to: 
+
+r / 1 - q
+
+## Binary Logistic Regression
+
+
+
+
+

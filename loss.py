@@ -29,7 +29,7 @@ class Loss:
 
         # L2 regularization bias
         if layer.bias_regularizer_L2 > 0:
-            regularization_loss += layer.bias_regularizer_L2 * np.sum(layer.bias * layer.bias)
+            regularization_loss += layer.bias_regularizer_L2 * np.sum(layer.biases * layer.biases)
 
         return regularization_loss
 
